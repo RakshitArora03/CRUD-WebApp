@@ -1,28 +1,57 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import DataList from "../components/DataList"
 import PageHeader from "../components/PageHeader"
-// import { Button } from "@/components/ui/button"
+import api from "../services/api"
 
 const columns = [
   { key: "photo", header: "Photo" },
   { key: "name", header: "Name" },
-  { key: "phone", header: "Mobile" },
-  { key: "email", header: "Mail ID" },
+  { key: "email", header: "Email" },
+  { key: "phone", header: "Phone" },
 ]
 
 export default function UsersPage() {
+  const queryClient = useQueryClient()
+
   const { data: users, isLoading } = useQuery({
     queryKey: ["users"],
-    queryFn: async () => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users")
-      if (!res.ok) {
-        throw new Error("Network response was not ok")
-      }
-      return res.json()
+    queryFn: api.fetchUsers,
+  })
+
+  const addMutation = useMutation({
+    mutationFn: api.addUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"])
     },
   })
+
+  const updateMutation = useMutation({
+    mutationFn: api.updateUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"])
+    },
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: api.deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"])
+    },
+  })
+
+  const handleAdd = (newUser) => {
+    addMutation.mutate(newUser)
+  }
+
+  const handleEdit = (editedUser) => {
+    updateMutation.mutate(editedUser)
+  }
+
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id)
+  }
 
   if (isLoading) return <div>Loading...</div>
 
@@ -30,19 +59,7 @@ export default function UsersPage() {
     <div className="flex flex-col h-full">
       <PageHeader />
       <div className="p-6 flex-1 bg-gray-100">
-        <div className="flex items-center justify-between mb-6">
-          <button variant="default" className="inline-block cursor-pointer rounded-md px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out bg-[#584099] hover:bg-[#6b4eb9]">
-            Add new
-          </button>
-          <button variant="outline">Filter</button>
-        </div>
-        <DataList
-          data={users}
-          columns={columns}
-          onRead={(user) => console.log("Read", user)}
-          onEdit={(user) => console.log("Edit", user)}
-          onDelete={(user) => console.log("Delete", user)}
-        />
+        <DataList title="Users" data={users} columns={columns} onAdd={handleAdd} onEdit={handleEdit} onDelete={handleDelete} />
       </div>
     </div>
   )

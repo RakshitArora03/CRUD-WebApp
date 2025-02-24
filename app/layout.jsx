@@ -14,9 +14,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
-          <div className="flex h-screen">
+          <div className="flex h-screen bg-gray-100">
             <Sidebar />
-            <div className="flex-1 flex flex-col">{children}</div>
+            <div className="flex-1 flex flex-col w-full lg:w-[calc(100%-16rem)]">{children}</div>
           </div>
         </QueryClientProvider>
       </body>
