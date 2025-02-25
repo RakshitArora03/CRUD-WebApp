@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import DataList from "../components/DataList"
-import PageHeader from "../components/PageHeader"
+import LoadingSpinner from "../components/LoadingSpinner"
 import api from "../services/api"
 
 const columns = [
@@ -53,11 +53,10 @@ export default function UsersPage() {
     deleteMutation.mutate(id)
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <LoadingSpinner/>
 
   return (
     <div className="flex flex-col h-full">
-      <PageHeader />
       <div className="p-6 flex-1 bg-gray-100">
         <DataList title="Users" data={users} columns={columns} onAdd={handleAdd} onEdit={handleEdit} onDelete={handleDelete} />
       </div>

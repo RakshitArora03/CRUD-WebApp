@@ -19,10 +19,16 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Button */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 btn btn-circle btn-ghost"
+        className="lg:hidden fixed top-6 left-4 z-50 text-white"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       >
-        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Toggle between Menu and X icon */}
+        {isMobileMenuOpen ? (
+          <X size={30}/>
+        ) : (
+          <Menu size={30} />
+        )}
+        {/* <Menu size={30} /> */}
       </button>
 
       {/* Sidebar */}
@@ -31,17 +37,23 @@ const Sidebar = () => {
         bg-[#584099] text-white
         fixed lg:static
         inset-y-0 left-0
-        w-64 h-full
+        w-64 h-screen
+        overflow-y-auto
         transform transition-transform duration-200 ease-in-out
         lg:transform-none
         ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
         z-40
       `}
       >
-        <div className="p-6">
-          {/* <h1 className="text-2xl font-bold">LOGO</h1> */}
+        <div className="sticky top-0 bg-[#584099] p-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold ml-10 mt-0">LOGO</h1>
+          {isMobileMenuOpen && (
+            <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-white">
+              {/* <X size={24} /> */}
+            </button>
+          )}
         </div>
-        <nav className="mt-6">
+        <nav className="mt-0 pb-24">
           {menuItems.map((item) => (
             <Link
               key={item.label}
@@ -49,7 +61,7 @@ const Sidebar = () => {
               className="block py-3 px-4 hover:bg-[#6b4eb9] transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <item.icon className="inline-block mr-2" size={30} />
+              <item.icon className="inline-block mr-2" size={40} />
               {item.label}
             </Link>
           ))}

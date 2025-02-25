@@ -4,7 +4,7 @@ import { useState } from "react"
 import AddEditModal from "./AddEditModal"
 import ReadModal from "./ReadModal"
 import DeleteModal from "./DeleteModal"
-import Notification from "./Notification"
+import toast from "react-hot-toast"
 
 export default function DataList({ data, columns, onAdd, onEdit, onDelete, title }) {
   const [currentPage, setCurrentPage] = useState(1)
@@ -13,7 +13,6 @@ export default function DataList({ data, columns, onAdd, onEdit, onDelete, title
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-  const [notification, setNotification] = useState({ message: "", type: "" })
 
   const itemsPerPage = 10
   const totalPages = Math.ceil(data?.length / itemsPerPage)
@@ -30,25 +29,19 @@ export default function DataList({ data, columns, onAdd, onEdit, onDelete, title
   const handleAdd = (newItem) => {
     onAdd(newItem)
     setIsAddModalOpen(false)
-    showNotification("Item added successfully", "success")
+    toast.success("Item added successfully")
   }
 
   const handleEdit = (editedItem) => {
     onEdit(editedItem)
     setIsEditModalOpen(false)
-    showNotification("Item updated successfully", "success")
+    toast.success("Item updated successfully")
   }
 
   const handleDelete = () => {
     onDelete(selectedItem.id)
     setIsDeleteModalOpen(false)
-    showNotification("Item deleted successfully", "success")
-  }
-
-
-  const showNotification = (message, type) => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification({ message: "", type: "" }), 3000)
+    toast.success("Item deleted successfully")
   }
 
   return (
@@ -198,11 +191,6 @@ export default function DataList({ data, columns, onAdd, onEdit, onDelete, title
 
       <DeleteModal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onDelete={handleDelete} />
 
-      <Notification
-        message={notification.message}
-        type={notification.type}
-        onClose={() => setNotification({ message: "", type: "" })}
-      />
     </div>
   )
 }

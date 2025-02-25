@@ -1,9 +1,8 @@
-import PageHeader from "./components/PageHeader"
+
 
 export default function Home() {
   return (
     <div className="flex flex-col h-full">
-      <PageHeader />
       <div className="p-6 flex-1 bg-gray-100">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#584099] text-white rounded-lg p-8 mb-8">
